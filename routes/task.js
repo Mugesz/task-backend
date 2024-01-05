@@ -49,49 +49,65 @@ router.post("/create-task", async (req, res) => {
 //view one
 router.get("/:id", async (req, res) => {
   try {
-    const task = await Task.findById(req.query.id);
-    console.log(task);
-    if (!task) {
-      res.status(404).json({ message: "Task not found" });
+    const taskId = req.params.id;
+
+    if (!taskId) {
+      return res.status(400).json({ message: "Task ID not provided" });
     }
-    res.send(task);
+
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.json(task);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "something went wrong" });
   }
 });
 
-// router.put("/edit-task/:id", async (req, res) => {
+router.put("/edit-task/:id", async (req, res) => {
+  try {
+    const taskId = req.params.id;
+    if (!taskId) {
+      return res.status(400).json({ message: "Task ID not provided" });
+    }
+    const updateFieds = {
+      title: req.body.title,
+      about: req.body.about,
+      data: req.body.data,
+    };
 
-//   // try {
-//   //   const { id } = req.params;
-//   //   const collection = await MongoClient.connect(URL);
-//   //   const db = collection.db("Authentication");
-//   //   const edittask = await db
-//   //     .collection("task")
-//   //     .findOneAndUpdate({ _id: new ObjectId(id) }, { $set: req.body });
-//   //   res.json({ message: "Task updated sucessfully" });
-//   //   await this.connect.close();
-//   // } catch (error) {
-//   //   console.log(error);
-//   //   res.status(500).status({ message: "someting went wrong" });
-//   // }
-// });
+    const task = await Task.findByIdAndUpdate(taskId, updateFieds, {
+      new: true,
+    });
 
-// router.delete("/:id", async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const collection = await MongoClient.connect(URL);
-//     const db = collection.db("Authentication");
-//     const task = await db
-//       .collection("task")
-//       .deleteOne({ _id: new ObjectId(id) });
-//     res.json({ message: "Task deleted" });
-//     await collection.close();
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: "something went wrong" });
-//   }
-// });
+    if (!task) {
+      return res.status(400).json({ message: "Task  not found" });
+    }
+    res.json(task);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "something went wrong" });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const taskId = req.params.id;
+  if (!taskId) {
+    return res.status(400).json({ message: "Task ID not provided" });
+  }
+
+  const deleteTask = await Task.findByIdAndDelete(taskId);
+
+  if(!deleteTask){
+    return res.status(400).json({ message: "Task  not found" });
+  }
+  res.send({message:"task deleted sucessfully"})
+  }
+
+);
 
 module.exports = router;
