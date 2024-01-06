@@ -34,6 +34,7 @@ router.get("/", async (req, res) => {
 // create task
 router.post("/create-task", async (req, res) => {
   try {
+    console.log(req.body)
     const task = new Task({
       title: req.body.title,
       about: req.body.about,
