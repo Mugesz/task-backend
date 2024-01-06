@@ -44,7 +44,7 @@ router.post("/create-task", async (req, res) => {
     res.status(200).json({ message: "task submitted successfully", task });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "something went wrong" });
+    res.status(500).json({ message: "something went wrong in createing task" });
   }
 });
 
