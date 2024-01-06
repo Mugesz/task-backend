@@ -36,7 +36,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const connection = await MongoClient.connect(URL);
     const db = connection.db("Authentication");
