@@ -41,6 +41,7 @@ router.post("/create-task", async (req, res) => {
       date: req.body.date,
     });
 
+
     await task.save();
     res.status(200).json({ message: "task submitted successfully", task });
   } catch (error) {
@@ -74,28 +75,23 @@ router.get("/:id", async (req, res) => {
 router.put("/edit-task/:id", async (req, res) => {
   try {
     const taskId = req.params.id;
-    if (!taskId) {
-      return res.status(400).json({ message: "Task ID not provided" });
-    }
-    const updateFieds = {
+
+
+    const updateFields = {
       title: req.body.title,
       about: req.body.about,
       data: req.body.data,
     };
 
-    const task = await Task.findByIdAndUpdate(taskId, updateFieds, {
-      new: true,
-    });
-
-    if (!task) {
-      return res.status(400).json({ message: "Task  not found" });
-    }
-    res.json(task);
+    const task = await Task.findByIdAndUpdate(taskId, updateFields, { new: true });
+    console.log(task)   
+    res.send(task);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "something went wrong" });
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 });
+
 
 router.delete("/:id", async (req, res) => {
   const taskId = req.params.id;
