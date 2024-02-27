@@ -72,50 +72,37 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/edit-task/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const taskId = req.params.id;
-
-    const updateFields = {
-      title: req.body.title,
-      about: req.body.about,
-      date: req.body.date, // Fixed typo here
-    };
-
-    const task = await Task.findByIdAndUpdate(taskId, updateFields, { new: true });
+    const {id} = req.params
     
-    if (!task) {
-      return res.status(404).json({ message: "Task not found" });
+    const edittask = {
+      title:req.body.title,
+      about:req.body.about,
+      date:req.body.date
     }
-
-    res.json(task);
+    const task = await Task.findByIdAndUpdate(id,edittask)
+    res.send(task)
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Something went wrong" });
+    console.log(error)
+    res.status(500).json({
+      message:"something went wrong"
+    })
   }
 });
 
 
 
 router.delete("/:id", async (req, res) => {
-  try {
-    const taskId = req.params.id;
-    
-    if (!taskId) {
-      return res.status(400).json({ message: "Task ID not provided" });
-    }
-
-    const deletedTask = await Task.findByIdAndDelete(taskId);
-
-    if (!deletedTask) {
-      return res.status(404).json({ message: "Task not found" });
-    }
-
-    res.json({ message: "Task deleted successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Something went wrong" });
-  }
+try {
+  const {id} = req.params
+  const del = await Task.findByIdAndDelete(id)
+} catch (error) {
+  console.log(error)
+  res.json({
+    message:"something went wrong"
+  })
+}
 });
 
 module.exports = router;
