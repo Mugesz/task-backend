@@ -13,6 +13,15 @@ mongoose
     console.error(err);
   });
 
+
+// mongoose.connect('mongodb://localhost:27017/Authentication', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   // Set the write concern here
+//   w: 'majority', // or w: 1, depending on your requirements
+// });
+
+
 const taskScheme = new mongoose.Schema({
   title: { type: String, required: true },
   about: { type: String, required: true },
